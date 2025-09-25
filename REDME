@@ -1,0 +1,41 @@
+Multi-Modal Sentiment Analyzer (Full Stack)
+This project is a full-stack web application that performs sentiment analysis on text, facial expressions, and sign language.
+
+Project Structure
+/frontend: Contains all the client-side code (HTML, CSS, JavaScript). This is what the user sees and interacts with.
+
+/backend: Contains the server-side Python code. It uses the Flask framework to create an API that the frontend communicates with to perform complex tasks.
+
+How to Run the Project
+1. Backend Setup (Python)
+First, you need to set up and run the backend server.
+
+Navigate to the backend folder:
+
+cd backend
+
+Create a virtual environment (recommended):
+
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+Install the required Python packages:
+
+pip install -r requirements.txt
+
+Run the server:
+
+python app.py
+
+The backend server will now be running on http://127.0.0.1:5000.
+
+2. Frontend Setup
+There is no complex setup for the frontend. Simply open the index.html file in your web browser.
+
+Navigate to the frontend folder and open the file:
+
+/frontend/index.html
+
+The application should now be fully functional. You can create an account, log in, and use all the analysis features, which are now powered by your Python backend.
+
+Note on Java: While this project uses a Python backend for simplicity and its strong AI/ML libraries, a Java backend could also be used, especially for the authentication part. In a microservices architecture, you could have a Java service (using a framework like Spring Boot) handle user management and a Python service for the AI tasks. For this project, I've consolidated everything into Python to make it easier to run.

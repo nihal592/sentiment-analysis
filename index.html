@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Consultation Sentiment Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="text-gray-200 antialiased">
+
+    <!-- Login/Signup View -->
+    <div id="loginView" class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <header class="text-center mb-8">
+                <div class="flex items-center justify-center gap-4">
+                     <i data-lucide="brain-circuit" class="w-12 h-12 gradient-text"></i>
+                     <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Sentiment Analyzer</h1>
+                </div>
+            </header>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="card p-8">
+                <h2 class="text-2xl font-bold text-center mb-2 text-white">Welcome Back!</h2>
+                <p class="text-center text-gray-400 mb-6">Sign in to continue</p>
+                <div id="loginError" class="text-red-400 text-sm text-center mb-4 hidden"></div>
+                <div class="space-y-4">
+                    <input id="loginUsername" type="text" placeholder="Username" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                    <input id="loginPassword" type="password" placeholder="Password" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                </div>
+                <button id="loginBtn" class="w-full btn-primary text-white font-bold py-3 rounded-lg mt-6">Login</button>
+                <div class="text-center mt-4 text-sm text-gray-400">
+                    <a href="#" id="showForgotPassword" class="hover:text-sky-400">Forgot Password?</a>
+                </div>
+                <p class="text-center mt-6 text-gray-400">
+                    Don't have an account? <a href="#" id="showSignup" class="font-semibold text-sky-400 hover:underline">Sign Up</a>
+                </p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="card p-8 hidden">
+                <h2 class="text-2xl font-bold text-center mb-2 text-white">Create Account</h2>
+                <p class="text-center text-gray-400 mb-6">Get started with your analysis</p>
+                <div id="signupError" class="text-red-400 text-sm text-center mb-4 hidden"></div>
+                <div id="signupSuccess" class="text-green-400 text-sm text-center mb-4 hidden"></div>
+                <div class="space-y-4">
+                    <input id="signupUsername" type="text" placeholder="Username" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                    <input id="signupPassword" type="password" placeholder="Password" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                    <input id="signupConfirmPassword" type="password" placeholder="Confirm Password" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                </div>
+                <button id="signupBtn" class="w-full btn-primary text-white font-bold py-3 rounded-lg mt-6">Create Account</button>
+                <p class="text-center mt-6 text-gray-400">
+                    Already have an account? <a href="#" id="showLoginFromSignup" class="font-semibold text-sky-400 hover:underline">Login</a>
+                </p>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="card p-8 hidden">
+                <h2 class="text-2xl font-bold text-center mb-2 text-white">Reset Password</h2>
+                <p class="text-center text-gray-400 mb-6">We'll pretend to send you a reset link</p>
+                <div id="resetSuccess" class="text-green-400 text-sm text-center mb-4 hidden"></div>
+                <input id="resetEmail" type="email" placeholder="Enter your email" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition">
+                <button id="resetBtn" class="w-full btn-primary text-white font-bold py-3 rounded-lg mt-6">Send Reset Link</button>
+                <p class="text-center mt-6 text-gray-400">
+                    <a href="#" id="showLoginFromForgot" class="font-semibold text-sky-400 hover:underline">Back to Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Main Analyzer View -->
+    <div id="analyzerView" class="min-h-screen flex-col items-center p-4 hidden">
+        
+        <!-- Header -->
+        <header class="w-full max-w-7xl mx-auto flex justify-between items-center mb-8">
+            <div class="flex items-center gap-4">
+                 <i data-lucide="brain-circuit" class="w-10 h-10 gradient-text"></i>
+                 <h1 class="text-3xl font-bold tracking-tight text-white">Multi-Modal Sentiment Analyzer</h1>
+            </div>
+            <button id="logoutBtn" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="w-full max-w-7xl mx-auto space-y-8">
+            <!-- Input Card & Text Analysis Results -->
+            <div class="card p-6">
+                 <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 text-sky-400"></i>
+                    Step 1: Analyze Text Sentiment
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <textarea id="commentInput" class="w-full h-40 bg-gray-900/50 border border-gray-600 rounded-lg p-4 focus:ring-2 focus:ring-sky-500 focus:outline-none transition resize-none" placeholder="Paste the e-consultation comment here..."></textarea>
+                        <button id="analyzeBtn" class="w-full sm:w-auto btn-primary text-white font-bold py-3 px-6 rounded-lg mt-4 flex items-center justify-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                            Analyze Sentiment
+                        </button>
+                    </div>
+                    <div id="textAnalysisContainer">
+                        <div id="placeholderCard" class="h-full flex flex-col items-center justify-center text-center bg-gray-900/50 rounded-lg p-4">
+                            <i data-lucide="search" class="w-16 h-16 text-gray-600 mb-4"></i>
+                            <h3 class="text-lg font-semibold text-gray-400">Text results will appear here</h3>
+                            <p class="text-gray-500 text-sm">Enter a comment and click "Analyze".</p>
+                       </div>
+                       <div id="resultsCard" class="hidden h-full">
+                           <div id="loader" class="flex flex-col items-center justify-center h-full hidden">
+                               <svg class="animate-spin h-10 w-10 text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                               </svg>
+                               <p class="mt-4 text-gray-400">Analyzing Text...</p>
+                           </div>
+                           <div id="resultContent"></div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vision Analysis Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Facial Analysis Card -->
+                <div class="card p-6 lg:col-span-1">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i data-lucide="camera" class="w-5 h-5 text-sky-400"></i>
+                        Facial Expression
+                    </h2>
+                    <div id="facialAnalysisContent">
+                        <div class="video-container mb-4">
+                            <video id="faceVideo" autoplay muted playsinline></video>
+                        </div>
+                        <div id="faceModelStatus" class="text-center text-gray-400 mb-4 text-sm">Waiting for backend...</div>
+                        <button id="startFaceBtn" class="w-full btn-primary text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                            <i data-lucide="video" class="w-5 h-5"></i>
+                            Start Camera
+                        </button>
+                        <div id="facialResult" class="text-center mt-4 p-3 rounded-lg bg-gray-800 hidden">
+                            <p class="text-md">Detected Mood: <span id="detectedMood" class="font-bold">...</span></p>
+                        </div>
+                        <div id="moodSuggestion" class="text-center mt-2 p-3 rounded-lg bg-sky-500/10 hidden">
+                            <p class="text-sky-300 text-xs">Feeling great! Why not try this?</p>
+                            <p id="suggestionText" class="font-semibold text-white mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sign Language Card -->
+                 <div class="card p-6 lg:col-span-2">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i data-lucide="hand" class="w-5 h-5 text-sky-400"></i>
+                        Sign Language to Speech
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                             <div class="video-container mb-4">
+                                <video id="signVideo" autoplay muted playsinline></video>
+                            </div>
+                            <div id="signModelStatus" class="text-center text-gray-400 mb-4 text-sm">Waiting for backend...</div>
+                             <button id="startSignBtn" class="w-full btn-primary text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                                <i data-lucide="video" class="w-5 h-5"></i>
+                                Start Sign Detection
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center justify-center h-full bg-gray-900/50 rounded-lg p-4">
+                             <i data-lucide="volume-2" class="w-16 h-16 text-gray-600"></i>
+                             <p class="text-center text-gray-400 my-4">Detected gesture will appear here.</p>
+                             <div id="signResult" class="text-center p-4 rounded-lg bg-gray-800 w-full">
+                                <p id="signResultText" class="text-2xl font-bold h-8">...</p>
+                            </div>
+                            <button id="speakBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 mt-4 transition">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i>
+                                Speak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot FAB -->
+        <button id="chat-fab" class="btn-primary p-4 rounded-full shadow-lg hover:scale-110 transition-transform">
+            <i data-lucide="message-circle" class="w-8 h-8 text-white"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="card flex-col hidden">
+            <div class="p-4 border-b border-gray-600 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-white">AI Assistant</h3>
+                <button id="close-chat" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="chatbox" class="flex-1 p-4 overflow-y-auto space-y-4">
+                <!-- Messages will be injected here -->
+                <div class="flex justify-start">
+                    <div class="bg-gray-700 text-white p-3 rounded-lg max-w-xs">
+                        Hello! How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-600 flex items-center gap-2">
+                <input type="text" id="chat-input" class="w-full p-3 rounded-lg form-input focus:ring-2 focus:outline-none transition" placeholder="Ask me anything...">
+                <button id="send-chat-btn" class="btn-primary p-3 rounded-lg">
+                    <i data-lucide="send" class="w-6 h-6 text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Included for dynamic classes -->
+    <script src="script.js"></script>
+</body>
+</html>
